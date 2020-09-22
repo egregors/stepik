@@ -24,7 +24,10 @@ add (Z s bs) (Z _ []) = (Z s bs)
 add a b = toBinWithSign $ fromBinWithSign a + fromBinWithSign b
 
 mul :: Z -> Z -> Z
-mul = undefined
+mul (Z _ []) (Z _ []) = (Z Plus [])
+mul (Z _ []) (Z _ bs) = (Z Plus [])
+mul (Z _ bs) (Z _ []) = (Z Plus [])
+mul a b = toBinWithSign $ fromBinWithSign a * fromBinWithSign b
 
 -- 10110110 = (1·2^7)+(0·2^6)+(1·2^5)+(1·2^4)+(0·2^3)+(1·2^2)+(1·2^1)+(0·2^0) = 128+32+16+4+2 = 182
 
@@ -106,3 +109,23 @@ test057 = (add (Z Plus [Zero, One]) (Z Minus [Zero, Zero, One])) == Z Minus [Zer
 test058 = (add (Z Plus [One, Zero, One]) (Z Minus [Zero, One, Zero, One])) == Z Minus [One, Zero, One]
 
 testAdd = test001 && test002 && test003 && test011 && test012 && test013 && test021 && test022 && test023 && test031 && test032 && test033 && test041 && test042 && test043 && test051 && test052 && test053 && test054 && test055 && test056 && test057 && test058
+
+emptyZ = Z Plus []
+
+test101 = (mul (Z Plus []) (Z Plus [])) == emptyZ
+test102 = (mul (Z Plus []) (Z Plus [One])) == emptyZ
+test103 = (mul (Z Plus []) (Z Minus [One])) == emptyZ
+test104 = (mul (Z Plus [One]) (Z Plus [])) == emptyZ
+test105 = (mul (Z Minus [One]) (Z Plus [])) == emptyZ
+
+test111 = (mul (Z Plus [One]) (Z Plus [One])) == Z Plus [One]
+test112 = (mul (Z Minus [One]) (Z Plus [One])) == Z Minus [One]
+test113 = (mul (Z Plus [One]) (Z Minus [One])) == Z Minus [One]
+test114 = (mul (Z Minus [One]) (Z Minus [One])) == Z Plus [One]
+
+test121 = (mul (Z Plus [One]) (Z Plus [Zero, One])) == Z Plus [Zero, One]
+test122 = (mul (Z Plus [Zero, Zero, One]) (Z Plus [Zero, Zero, One])) == Z Plus [Zero, Zero, Zero, Zero, One]
+
+test131 = (mul (Z Plus [One, Zero, One, Zero, One]) (Z Plus [One, One, One])) == Z Plus [One, One, Zero, Zero, One, Zero, Zero, One]
+testMul = test101 && test102 && test103 && test104 && test105 && test111 && test112 && test113 && test114 && test121 && test122 && test131
+testAll = testAdd && testMul
