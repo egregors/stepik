@@ -1,3 +1,4 @@
+import Control.Monad.State (MonadState (get, put), evalState, modify')
 import Data.List (intercalate)
 
 data Tree a = Leaf a | Fork (Tree a) a (Tree a)
@@ -44,4 +45,15 @@ testTree =
     )
 
 numberTree :: Tree () -> Tree Integer
-numberTree tree = undefined
+numberTree tree = evalState (go tree) 1
+  where
+    go (Fork l _ r) = do
+      lB <- go l
+      n <- get
+      put (n + 1)
+      rB <- go r
+      return (Fork lB n rB)
+    go (Leaf _) = do
+      n <- get
+      put (n + 1)
+      return (Leaf n)
