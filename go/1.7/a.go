@@ -19,14 +19,14 @@ var errInsufficientFunds error = errors.New("insufficient funds")
 // что указана некорректная сумма транзакции
 var errInvalidAmount error = errors.New("invalid transaction amount")
 
-// account представляет счет
-type account struct {
+// account_ представляет счет
+type account_ struct {
 	balance   int
 	overdraft int
 }
 
 // deposit зачисляет деньги на счет.
-func (acc *account) deposit(amount int) error {
+func (acc *account_) deposit(amount int) error {
 	if amount <= 0 {
 		return errInvalidAmount
 	}
@@ -37,7 +37,7 @@ func (acc *account) deposit(amount int) error {
 }
 
 // withdraw списывает деньги со счета.
-func (acc *account) withdraw(amount int) error {
+func (acc *account_) withdraw(amount int) error {
 	if amount <= 0 {
 		return errInvalidAmount
 	}
@@ -56,24 +56,24 @@ func (acc *account) withdraw(amount int) error {
 // └─────────────────────────────────┘
 
 type test struct {
-	acc   account
+	acc   account_
 	trans []int
 }
 
 var tests = map[string]test{
-	"{100 10} [10 -50 20]":   {account{100, 10}, []int{10, -50, 20}},
-	"{30 0} [-20 -10]":       {account{30, 0}, []int{-20, -10}},
-	"{30 0}, [-20 -10 -10]":  {account{30, 0}, []int{-20, -10, -10}},
-	"{30 0}, [-100]":         {account{30, 0}, []int{-100}},
-	"{0 0}, [10 20 30]":      {account{0, 0}, []int{10, 20, 30}},
-	"{0 0}, [10 -10 20 -20]": {account{0, 0}, []int{10, -10, 20, -20}},
-	"{20 10}, [-20 -10]":     {account{20, 10}, []int{-20, -10}},
-	"{20 10}, [-20 -10 -10]": {account{20, 10}, []int{-20, -10, -10}},
-	"{0 100}, [-20 -10]":     {account{0, 100}, []int{-20, -10}},
-	"{0 30}, [-20 -10]":      {account{0, 30}, []int{-20, -10}},
-	"{0 30}, [-20 -10 -10]":  {account{0, 30}, []int{-20, -10, -10}},
-	"{70 30}, [-100 100]":    {account{70, 30}, []int{-100, 100}},
-	"{100 10}, [10 0 20]":    {account{100, 10}, []int{10, 0, 20}},
+	"{100 10} [10 -50 20]":   {account_{100, 10}, []int{10, -50, 20}},
+	"{30 0} [-20 -10]":       {account_{30, 0}, []int{-20, -10}},
+	"{30 0}, [-20 -10 -10]":  {account_{30, 0}, []int{-20, -10, -10}},
+	"{30 0}, [-100]":         {account_{30, 0}, []int{-100}},
+	"{0 0}, [10 20 30]":      {account_{0, 0}, []int{10, 20, 30}},
+	"{0 0}, [10 -10 20 -20]": {account_{0, 0}, []int{10, -10, 20, -20}},
+	"{20 10}, [-20 -10]":     {account_{20, 10}, []int{-20, -10}},
+	"{20 10}, [-20 -10 -10]": {account_{20, 10}, []int{-20, -10, -10}},
+	"{0 100}, [-20 -10]":     {account_{0, 100}, []int{-20, -10}},
+	"{0 30}, [-20 -10]":      {account_{0, 30}, []int{-20, -10}},
+	"{0 30}, [-20 -10 -10]":  {account_{0, 30}, []int{-20, -10, -10}},
+	"{70 30}, [-100 100]":    {account_{70, 30}, []int{-100, 100}},
+	"{100 10}, [10 0 20]":    {account_{100, 10}, []int{10, 0, 20}},
 }
 
 func main() {
