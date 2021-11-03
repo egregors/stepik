@@ -11,7 +11,7 @@ instance Applicative Prs where
   -- (<*>) :: f (a -> b) -> f a -> f b
   pf <*> pv = Prs fun where
     fun s = do
-      (g, s') <- runPrs pf s
+      (g, s')  <- runPrs pf s
       (a, s'') <- runPrs pv s'
       return (g a, s'')
 
